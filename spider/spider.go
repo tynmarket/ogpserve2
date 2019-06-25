@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"sync"
 	"time"
 
 	lru "github.com/hashicorp/golang-lru"
@@ -18,10 +19,10 @@ type Spider struct {
 
 const (
 	// クロールの並列数の最大値
-	parallel = 10
+	crawlerCount = 10
 )
 
-var cacheSize = 100000
+var cacheSize = 1000
 var cache, _ = lru.New(cacheSize)
 
 //var logger = GetLogger()
@@ -61,9 +62,12 @@ func (s *Spider) Run(query url.Values) []*model.Ogp {
 // Loop is
 func (s *Spider) Loop() {
 	ctx := context.Background()
-	n := rate.Every(time.Second / parallel)
-	l := rate.NewLimiter(n, parallel)
-	crawler := &Crawler{}
+	n := rate.Every(time.Second / crawlerCount)
+	l := rate.NewLimiter(n, crawlerCount)
+
+	domains := make(map[string]struct{})
+	mutex := new(sync.Mutex)
+	crawler := &Crawler{domains: domains, mutex: mutex}
 
 	for {
 		select {

@@ -11,6 +11,8 @@ import (
 func main() {
 	spider := &spider.Spider{}
 
+	go spider.Loop()
+
 	// Return Twitter Card
 	http.Handle("/twitter", &handler.TwitterCardHandler{Spider: spider})
 

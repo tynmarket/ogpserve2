@@ -13,6 +13,16 @@ type Crawler struct {
 
 // Run is
 func (c *Crawler) Run(url string) {
+	ok := c.lockDomain(url)
+
+	if ok {
+		logURL("crawl", url)
+
+		c.freeDomain(url)
+	} else {
+		logURL("add to queue", url)
+		queue <- url
+	}
 
 }
 

@@ -14,7 +14,6 @@ import (
 
 // Spider is
 type Spider struct {
-	queue chan string
 }
 
 const (
@@ -22,6 +21,8 @@ const (
 	crawlerCount = 10
 )
 
+var queueSize = 10000
+var queue = make(chan string, queueSize)
 var cacheSize = 1000
 var cache, _ = lru.New(cacheSize)
 
@@ -53,7 +54,7 @@ func (s *Spider) Run(query url.Values) []*model.Ogp {
 
 	// Crawl for not cached URLs
 	for _, url := range urls {
-		s.queue <- url
+		queue <- url
 	}
 
 	return ogps
@@ -71,7 +72,7 @@ func (s *Spider) Loop() {
 
 	for {
 		select {
-		case url := <-s.queue:
+		case url := <-queue:
 			l.Wait(ctx)
 			go crawler.Run(url)
 		}

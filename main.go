@@ -7,11 +7,8 @@ import (
 	"github.com/tynmarket/ogpserve2/spider"
 )
 
-var QueueSize = 10000
-
 func main() {
-	queue := make(chan string, QueueSize)
-	spider := &spider.Spider{queue: queue}
+	spider := &spider.Spider{}
 
 	// Return Twitter Card
 	http.Handle("/twitter", &handler.TwitterCardHandler{Spider: spider})

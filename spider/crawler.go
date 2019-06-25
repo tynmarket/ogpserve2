@@ -1,12 +1,15 @@
 package spider
 
 import (
+	"io/ioutil"
+	"net/http"
 	"strings"
 	"sync"
 )
 
 // Crawler struct
 type Crawler struct {
+	parser  *Parser
 	domains map[string]struct{}
 	mutex   *sync.Mutex
 }
@@ -16,7 +19,9 @@ func (c *Crawler) Run(url string) {
 	ok := c.lockDomain(url)
 
 	if ok {
-		logURL("crawl", url)
+		logURL("crawl for", url)
+
+		c.crawl(url)
 
 		c.freeDomain(url)
 	} else {
@@ -59,4 +64,21 @@ func getDomain(url string) string {
 		return strs[2]
 	}
 	return ""
+}
+
+func (c *Crawler) crawl(url string) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+
+	bytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+	html := string(bytes)
+
+	// Send to Parser
+	c.parser.parse(url, html)
 }

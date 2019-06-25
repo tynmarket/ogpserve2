@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/tynmarket/ogpserve/model"
-	"github.com/tynmarket/ogpserve/spider"
+	"github.com/tynmarket/ogpserve2/spider"
 )
 
 // TwitterCardHandler return Twitter Card response

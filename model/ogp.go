@@ -2,7 +2,6 @@ package model
 
 // Ogp represents Opn Graph Protocol including Twitter Card
 type Ogp struct {
-	RequestURL  string       `json:"request_url"`
 	Type        string       `json:"type"`
 	Title       string       `json:"title"`
 	Description string       `json:"description"`
@@ -16,7 +15,6 @@ type Ogp struct {
 // Copy returns shallow copy of Ogp
 func (o *Ogp) Copy() *Ogp {
 	return &Ogp{
-		RequestURL:  o.RequestURL,
 		Type:        o.Type,
 		Title:       o.Title,
 		Description: o.Description,

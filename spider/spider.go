@@ -68,7 +68,8 @@ func (s *Spider) Loop() {
 
 	domains := make(map[string]struct{})
 	mutex := new(sync.Mutex)
-	crawler := &Crawler{domains: domains, mutex: mutex}
+	parser := &Parser{}
+	crawler := &Crawler{parser: parser, domains: domains, mutex: mutex}
 
 	for {
 		select {

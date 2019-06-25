@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/tynmarket/ogpserve/model"
+	"github.com/tynmarket/ogpserve2/model"
 	"github.com/tynmarket/ogpserve2/spider"
 )
 
@@ -13,8 +13,6 @@ import (
 type TwitterCardHandler struct {
 	Spider *spider.Spider
 }
-
-var whitelist = spider.NewWhitelist()
 
 // ServeHTTP handler response
 func (h *TwitterCardHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +24,7 @@ func (h *TwitterCardHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	for _, ogp := range ogps {
 		card := *ogp.MergeIntoTwitter()
 		if card.ValuePresent() {
-			resp[ogp.RequestURL] = card
+			resp[ogp.URL] = card
 		}
 	}
 

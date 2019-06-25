@@ -8,7 +8,7 @@ import (
 	"time"
 
 	lru "github.com/hashicorp/golang-lru"
-	"github.com/tynmarket/ogpserve/model"
+	"github.com/tynmarket/ogpserve2/model"
 	"golang.org/x/time/rate"
 )
 

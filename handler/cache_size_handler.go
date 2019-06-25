@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/tynmarket/ogpserve/spider"
+	"github.com/tynmarket/ogpserve2/spider"
 )
 
 // CacheSizeHandler return current cache size
@@ -15,7 +15,7 @@ type CacheSizeHandler struct {
 
 func (h *CacheSizeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	resp := map[string]int{}
-	resp["size"] = h.Spider.CurrentCacheSize()
+	//resp["size"] = h.Spider.CurrentCacheSize()
 
 	bytes, err := json.Marshal(resp)
 	if err != nil {

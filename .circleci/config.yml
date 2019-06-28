@@ -1,11 +1,11 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/app
     docker:
       # CircleCI Go images available at: https://hub.docker.com/r/circleci/golang/
       - image: circleci/golang:1.12.6
 
-    working_directory: /app
 
     environment:
       TEST_RESULTS: /tmp/test-results

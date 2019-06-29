@@ -3,7 +3,9 @@ package spider
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/url"
+	"os"
 	"sync"
 	"time"
 
@@ -19,6 +21,7 @@ type Spider struct {
 const (
 	// クロールの並列数の最大値
 	crawlerCount = 10
+	logFile      = "/var/log/ogpserve2/ogpserve2.log"
 )
 
 var queueSize = 10000
@@ -141,6 +144,17 @@ func logInfo(msg string, tag string) {
 
 func logURL(msg string, url string) {
 	fmt.Printf("%s: %s\n", msg, url)
+
+	file, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		panic("Cannot open " + logFile + ": " + err.Error())
+	}
+	defer file.Close()
+
+	log.SetOutput(file)
+	log.SetFlags(log.LstdFlags)
+
+	log.Printf("%s: %s\n", msg, url)
 	/*
 		v := 0
 		if requestToTop {

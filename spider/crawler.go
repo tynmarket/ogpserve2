@@ -5,14 +5,19 @@ import (
 	"net/http"
 	"strings"
 	"sync"
+	"time"
 )
 
 // Crawler struct
 type Crawler struct {
 	parser  *Parser
-	domains map[string]struct{}
+	domains map[string]int64
 	mutex   *sync.Mutex
 }
+
+const (
+	intervalMills = int64(1000) // 1000 mills
+)
 
 // Run is
 func (c *Crawler) Run(url string) {
@@ -22,8 +27,6 @@ func (c *Crawler) Run(url string) {
 		logURL("crawl for", url)
 
 		c.crawl(url)
-
-		c.freeDomain(url)
 	} else {
 		logURL("add to queue", url)
 		queue <- url
@@ -37,10 +40,17 @@ func (c *Crawler) lockDomain(url string) bool {
 
 	if domain != "" {
 		c.mutex.Lock()
-		_, ok := c.domains[domain]
 
-		if !ok {
-			c.domains[domain] = struct{}{}
+		// キャッシュが溜まったら常にクリア
+		c.checkCacheSizeAndClear()
+
+		prevNextTime, ok := c.domains[domain]
+		current := time.Now().UnixNano() / 1000000
+
+		// 初回またはインターバル経過後
+		if !ok || current >= prevNextTime {
+			nextTime := current + intervalMills
+			c.domains[domain] = nextTime
 			return true
 		}
 	}
@@ -48,13 +58,10 @@ func (c *Crawler) lockDomain(url string) bool {
 	return false
 }
 
-func (c *Crawler) freeDomain(url string) {
-	domain := getDomain(url)
-
-	if domain != "" {
-		defer c.mutex.Unlock()
-		c.mutex.Lock()
-		delete(c.domains, domain)
+func (c *Crawler) checkCacheSizeAndClear() {
+	if cache.Len() >= cacheSize {
+		cache.Purge()
+		c.domains = make(map[string]int64)
 	}
 }
 

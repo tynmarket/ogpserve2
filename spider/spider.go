@@ -69,7 +69,7 @@ func (s *Spider) Loop() {
 	n := rate.Every(time.Second / crawlerCount)
 	l := rate.NewLimiter(n, crawlerCount)
 
-	domains := make(map[string]struct{})
+	domains := make(map[string]int64)
 	mutex := new(sync.Mutex)
 	parser := &Parser{}
 	crawler := &Crawler{parser: parser, domains: domains, mutex: mutex}

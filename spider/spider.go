@@ -78,7 +78,7 @@ func (s *Spider) Loop() {
 		select {
 		case url := <-queue:
 			// すでにキャッシュにある場合は何もしない
-			if !cache.Contains(url) {
+			if cache.Contains(url) {
 				continue
 			}
 

@@ -77,6 +77,11 @@ func (s *Spider) Loop() {
 	for {
 		select {
 		case url := <-queue:
+			// すでにキャッシュにある場合は何もしない
+			if !cache.Contains(url) {
+				continue
+			}
+
 			l.Wait(ctx)
 			go crawler.Run(url)
 		}

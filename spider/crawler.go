@@ -74,7 +74,12 @@ func getDomain(url string) string {
 }
 
 func (c *Crawler) crawl(url string) {
-	resp, err := http.Get(url)
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return
+	}
+	resp, err := client.Do(req)
 	if err != nil {
 		return
 	}

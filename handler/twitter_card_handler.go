@@ -24,7 +24,7 @@ func (h *TwitterCardHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	for _, ogp := range ogps {
 		card := *ogp.MergeIntoTwitter()
 		if card.ValuePresent() {
-			resp[ogp.URL] = card
+			resp[ogp.RequestURL] = card
 		}
 	}
 

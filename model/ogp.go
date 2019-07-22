@@ -10,6 +10,7 @@ type Ogp struct {
 	Retry       bool         `json:"retry"`
 	TwitterCard *TwitterCard `json:"twitter"`
 	SummaryCard bool
+	RequestURL  string
 }
 
 // Copy returns shallow copy of Ogp

@@ -37,7 +37,7 @@ var reCardRev = regexp.MustCompile("meta content=\"([^<>]+?)\" (name|property)=\
 var reTitleTag = regexp.MustCompile("<title>(.+)</title>")
 
 // Parse ogp meta tags
-func (p *Parser) parse(urlStr string, html string) {
+func (p *Parser) parse(requestURL string, html string) {
 	html = convert(html)
 	ogps := reOgp.FindAllStringSubmatch(html, -1)
 	ogpsRev := reOgpRev.FindAllStringSubmatch(html, -1)
@@ -132,7 +132,9 @@ func (p *Parser) parse(urlStr string, html string) {
 		}
 	}
 
-	cache.Add(urlStr, ogp)
+	ogp.RequestURL = requestURL
+
+	cache.Add(requestURL, ogp)
 }
 
 func convert(html string) string {

@@ -25,8 +25,10 @@ const (
 
 // Twitter card meta tags
 const (
-	CARD = "card"
-	SITE = "site"
+	CARD    = "card"
+	SITE    = "site"
+	PHOTO   = "photo"
+	SUMMARY = "summary"
 )
 
 var reCharset = regexp.MustCompile("meta charset=\"(.+)\"")
@@ -130,6 +132,10 @@ func (p *Parser) parse(requestURL string, html string) {
 		if err == nil {
 			ogp.TwitterCard.Image = url.Scheme + "://" + url.Host + ogp.TwitterCard.Image
 		}
+	}
+
+	if ogp.TwitterCard.Card == PHOTO {
+		ogp.TwitterCard.Card = SUMMARY
 	}
 
 	ogp.RequestURL = requestURL

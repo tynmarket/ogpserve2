@@ -36,7 +36,7 @@ var reOgp = regexp.MustCompile("meta property=\"og:([a-z]+)\" content=\"([^<>]+?
 var reOgpRev = regexp.MustCompile("meta content=\"([^<>]+?)\" property=\"og:([a-z]+)\"")
 var reCard = regexp.MustCompile("meta (name|property)=\"twitter:([a-z]+)\" content=\"([^<>]+?)\"")
 var reCardRev = regexp.MustCompile("meta content=\"([^<>]+?)\" (name|property)=\"twitter:([a-z]+)\"")
-var reTitleTag = regexp.MustCompile("<title>(.+)</title>")
+var reTitleTag = regexp.MustCompile("<title.*>(.+)</title>")
 
 // Parse ogp meta tags
 func (p *Parser) parse(requestURL string, html string) {

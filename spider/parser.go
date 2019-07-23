@@ -29,6 +29,7 @@ const (
 	SITE    = "site"
 	PHOTO   = "photo"
 	SUMMARY = "summary"
+	LARGE   = "summary_large_image"
 )
 
 var reCharset = regexp.MustCompile("meta charset=\"(.+)\"")
@@ -37,6 +38,7 @@ var reOgpRev = regexp.MustCompile("meta content=\"([^<>]+?)\" property=\"og:([a-
 var reCard = regexp.MustCompile("meta (name|property)=\"twitter:([a-z]+)\" content=\"([^<>]+?)\"")
 var reCardRev = regexp.MustCompile("meta content=\"([^<>]+?)\" (name|property)=\"twitter:([a-z]+)\"")
 var reTitleTag = regexp.MustCompile("<title.*>(.+)</title>")
+var reFigureTag = regexp.MustCompile("<figure.*><img .*src=\"(.+?)\" .*></figure>")
 
 // Parse ogp meta tags
 func (p *Parser) parse(requestURL string, html string) {
@@ -117,6 +119,16 @@ func (p *Parser) parse(requestURL string, html string) {
 
 		if len(match) > 1 {
 			ogp.Title = match[1]
+		}
+	}
+
+	// figureをimageとして取得
+	if ogp.Image == "" && ogp.TwitterCard.Image == "" {
+		match := reFigureTag.FindStringSubmatch(html)
+
+		if len(match) > 1 {
+			ogp.Image = match[1]
+			ogp.TwitterCard.Card = LARGE
 		}
 	}
 

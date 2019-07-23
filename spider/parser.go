@@ -30,6 +30,7 @@ const (
 	PHOTO   = "photo"
 	SUMMARY = "summary"
 	LARGE   = "summary_large_image"
+	DEFAULT = "https://tyn-imarket.com/public/default-image.png"
 )
 
 var reCharset = regexp.MustCompile("meta charset=\"(.+)\"")
@@ -149,6 +150,11 @@ func (p *Parser) parse(requestURL string, html string) {
 	if ogp.TwitterCard.Card == PHOTO ||
 		ogp.Title != "" && ogp.TwitterCard.Card == "" {
 		ogp.TwitterCard.Card = SUMMARY
+	}
+
+	if (ogp.Title != "" || ogp.TwitterCard.Title != "") &&
+		ogp.Image == "" && ogp.TwitterCard.Image == "" {
+		ogp.Image = DEFAULT
 	}
 
 	ogp.RequestURL = requestURL

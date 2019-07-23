@@ -146,7 +146,8 @@ func (p *Parser) parse(requestURL string, html string) {
 		}
 	}
 
-	if ogp.TwitterCard.Card == PHOTO {
+	if ogp.TwitterCard.Card == PHOTO ||
+		ogp.Title != "" && ogp.TwitterCard.Card == "" {
 		ogp.TwitterCard.Card = SUMMARY
 	}
 

@@ -155,6 +155,7 @@ func (p *Parser) parse(requestURL string, html string) {
 	if (ogp.Title != "" || ogp.TwitterCard.Title != "") &&
 		ogp.Image == "" && ogp.TwitterCard.Image == "" {
 		ogp.Image = DEFAULT
+		ogp.TwitterCard.Card = SUMMARY
 	}
 
 	ogp.RequestURL = requestURL

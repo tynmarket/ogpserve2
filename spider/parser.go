@@ -34,6 +34,7 @@ const (
 )
 
 var reCharset = regexp.MustCompile("meta charset=\"(.+)\"")
+var reCharsetOld = regexp.MustCompile("meta.+content=\".*charset=(.+)\"")
 var reOgp = regexp.MustCompile("(?s)meta property=\"og:([a-z]+)\"[\n ]+content=[\"']([^<>]+?)[\"']")
 var reOgpRev = regexp.MustCompile("(?s)meta content=[\"']([^<>]+?)[\"'][\n ]+property=\"og:([a-z]+)\"")
 var reCard = regexp.MustCompile("meta (name|property)=\"twitter:([a-z]+)\" content=\"([^<>]+?)\"")
@@ -166,7 +167,11 @@ func (p *Parser) parse(requestURL string, html string) {
 func convert(html string) string {
 	match := reCharset.FindStringSubmatch(html)
 	if len(match) == 0 {
-		return html
+		match = reCharsetOld.FindStringSubmatch(html)
+
+		if len(match) == 0 {
+			return html
+		}
 	}
 
 	char := match[1]
